@@ -1,0 +1,20 @@
+GET http://localhost:8080/configure HTTP/1.1
+
+###
+POST http://localhost:8080/configure/channel/logs HTTP/1.1
+Content-Type: application/json
+
+{
+  "guildId": "1221581366911697036",
+  "channelId": "1386145444350132326"
+}
+
+###
+
+POST http://localhost:8080/configure/channel/vips-table HTTP/1.1
+Content-Type: application/json
+
+{
+  "guildId": "1221581366911697036",
+  "channelId": "1386145444350132326"
+}

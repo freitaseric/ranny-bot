@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Guild {
+  id            String   @id @unique
+  logChannelId  String?
+  vipsChannelId String?
+  vips          Vip[]
+  members       Member[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("guilds")
+}
+
+model Vip {
+  id          String   @id @default(ulid())
+  name        String
+  description String?
+  price       Decimal
+  currency    String   @default("brl")
+  roleId      String   @unique
+  members     Member[]
+
+  guild   Guild?  @relation(fields: [guildId], references: [id])
+  guildId String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([guildId])
+  @@map("vips")
+}
+
+model Member {
+  id      String  @id
+  guild   Guild   @relation(fields: [guildId], references: [id])
+  guildId String  @unique
+  vip     Vip?    @relation(fields: [vipId], references: [id])
+  vipId   String? @unique
+
+  @@index([guildId, vipId])
+  @@map("members")
+}
